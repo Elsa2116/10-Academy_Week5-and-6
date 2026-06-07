@@ -1,0 +1,23 @@
+# Data and generated outputs
+data/raw/*
+data/processed/*
+models/*
+reports/figures/*
+*.joblib
+*.pkl
+*.parquet
+*.csv
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.env
+.ipynb_checkpoints/
+.pytest_cache/
+
+# Keep directory placeholders
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+!models/.gitkeep
+!reports/figures/.gitkeep
