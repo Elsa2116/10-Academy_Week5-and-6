@@ -20,4 +20,5 @@ __pycache__/
 !data/raw/.gitkeep
 !data/processed/.gitkeep
 !models/.gitkeep
+!models/README.md
 !reports/figures/.gitkeep
