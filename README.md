@@ -14,12 +14,15 @@ The project follows the Adey Innovations Inc. challenge requirements: clean and 
 fraud-detection/
 ├── .vscode/settings.json
 ├── .github/workflows/unittests.yml
-├── data/raw/                 # Add raw CSV files here; ignored by git
-├── data/processed/           # Generated feature datasets; ignored by git
+├── data/                    # Source data and generated datasets
+│   ├── README.md
+│   ├── raw/                 # Add raw CSV files here; ignored by git
+│   └── processed/           # Generated feature datasets; ignored by git
 ├── notebooks/                # Runnable analysis notebooks for EDA, features, modeling, and SHAP
 ├── src/                      # Reusable project modules
 ├── tests/                    # Unit tests
 ├── models/                   # Saved model artifacts; ignored by git
+│   └── README.md
 ├── scripts/                  # CLI scripts for Task 1-3
 ├── reports/figures/          # Generated EDA/model/SHAP plots
 ├── requirements.txt
@@ -31,7 +34,9 @@ fraud-detection/
 
 ```bash
 python -m venv .venv
-source .venv/bin/activate  # Windows: .venv\Scripts\activate
+.venv\Scripts\Activate.ps1  # PowerShell
+# or: .venv\Scripts\activate.bat  # Command Prompt
+pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
@@ -42,6 +47,14 @@ data/raw/Fraud_Data.csv
 data/raw/IpAddress_to_Country.csv
 data/raw/creditcard.csv
 ```
+
+Generated outputs are written to these paths:
+
+- `data/processed/` for cleaned and feature-engineered datasets;
+- `models/` for serialized model artifacts;
+- `reports/figures/` for generated plots and visual summaries.
+
+The repository keeps `data/` and `models/` visible with placeholder documentation so the expected project layout is clear even before files are generated.
 
 ## Run Task 1: data analysis and preprocessing
 
@@ -90,4 +103,5 @@ The SHAP script generates:
 Accuracy is intentionally not used as the primary metric because fraud is rare. The project prioritizes AUC-PR and F1-score, with confusion matrices used to interpret false positives and false negatives.
 
 Resampling is applied only after the stratified train-test split and only on the training set to avoid data leakage.
+
 # 10-Academy_Week5-and-6
