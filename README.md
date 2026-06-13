@@ -90,13 +90,18 @@ Models included:
 ```bash
 python scripts/run_shap.py --dataset fraud
 python scripts/run_shap.py --dataset creditcard
+python scripts/generate_final_report.py
 ```
 
 The SHAP script generates:
 
 - global SHAP summary plot;
+- built-in feature-importance bar chart;
+- built-in vs SHAP comparison chart;
 - feature importance comparison;
 - force/waterfall-style explanations for true positive, false positive, and false negative examples when available.
+
+The report generator consolidates the metrics and SHAP outputs into `reports/final_report.md` for final submission.
 
 ## Notes on class imbalance
 
