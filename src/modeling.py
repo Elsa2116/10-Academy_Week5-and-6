@@ -19,9 +19,10 @@ def get_models():
     return {
         "logistic_regression": LogisticRegression(max_iter=1000, class_weight="balanced", random_state=RANDOM_STATE),
         "random_forest": RandomForestClassifier(
-            n_estimators=250,
-            max_depth=None,
-            min_samples_leaf=2,
+            n_estimators=60,
+            max_depth=8,
+            min_samples_leaf=10,
+            max_samples=0.5,
             class_weight="balanced_subsample",
             n_jobs=-1,
             random_state=RANDOM_STATE,
@@ -46,14 +47,16 @@ def train_and_evaluate(df: pd.DataFrame, target: str, model_dir: Path, dataset_n
     rows = []
     best_model = None
     best_score = -np.inf
+    n_splits = 3 if dataset_name == "fraud" else 2
 
     for model_name, model in get_models().items():
+        print(f"Training {dataset_name}: {model_name}")
         pipeline = ImbPipeline([
             ("preprocess", preprocessor),
             ("smote", SMOTE(random_state=RANDOM_STATE)),
             ("model", model),
         ])
-        cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=RANDOM_STATE)
+        cv = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=RANDOM_STATE)
         cv_scores = cross_validate(
             pipeline,
             split.X_train,
@@ -81,6 +84,8 @@ def train_and_evaluate(df: pd.DataFrame, target: str, model_dir: Path, dataset_n
         if row["auc_pr"] > best_score:
             best_score = row["auc_pr"]
             best_model = pipeline
+
+    print(f"Finished {dataset_name} training")
 
     model_dir.mkdir(parents=True, exist_ok=True)
     joblib.dump(best_model, model_dir / f"best_{dataset_name}_model.joblib")

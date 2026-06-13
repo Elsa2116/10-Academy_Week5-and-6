@@ -10,8 +10,8 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from src.config import FIGURES_DIR, MODELS_DIR, PROCESSED_DIR
-from src.explainability import shap_summary
-from src.preprocessing import prepare_modeling_frame
+from src.explainability import generate_shap_artifacts
+from src.preprocessing import prepare_modeling_frame, stratified_split
 
 
 def main() -> None:
@@ -28,12 +28,17 @@ def main() -> None:
         target = "Class"
 
     modeling_df = prepare_modeling_frame(df, target)
-    X_sample = modeling_df.drop(columns=[target]).sample(min(args.sample_size, len(modeling_df)), random_state=42)
-    shap_summary(
+    split = stratified_split(modeling_df, target)
+    X_sample = split.X_test.sample(min(args.sample_size, len(split.X_test)), random_state=42)
+    summary = generate_shap_artifacts(
         MODELS_DIR / f"best_{args.dataset}_model.joblib",
         X_sample,
-        FIGURES_DIR / f"{args.dataset}_shap_summary.png",
+        split.X_test,
+        split.y_test,
+        FIGURES_DIR,
+        args.dataset,
     )
+    print(summary["top_drivers"])
     print(f"Saved SHAP plot for {args.dataset}.")
 
 
